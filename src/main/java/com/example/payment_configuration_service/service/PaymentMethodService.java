@@ -38,6 +38,21 @@ public class PaymentMethodService {
         return paymentMethodResponses;
     }
 
+    public List<PaymentMethodResponse> filterByName(String name) {
+        final List<PaymentMethod> paymentMethods = paymentMethodRepository.findByNameContainingIgnoreCase(name);
+        final List<PaymentMethodResponse> paymentMethodResponses = new java.util.ArrayList<>();
+        paymentMethods.forEach(paymentMethod -> {
+            final List<PaymentPlan> paymentPlans = getPaymentPlans(paymentMethod);
+            final List<PaymentPlanResponse> paymentPlanResponses = new java.util.ArrayList<>();
+            paymentPlans.forEach(paymentPlan -> {
+                paymentPlanResponses.add(new PaymentPlanResponse(paymentPlan));
+
+            });
+            paymentMethodResponses.add(new PaymentMethodResponse(paymentMethod, paymentPlanResponses));
+
+        });
+        return paymentMethodResponses;
+    }
 
     public List<PaymentPlan> getPaymentPlans(PaymentMethod paymentMethod) {
         return paymentPlanRepository.findByPaymentMethod(paymentMethod);
