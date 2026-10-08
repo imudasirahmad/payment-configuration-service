@@ -1,5 +1,5 @@
 package com.example.payment_configuration_service.controller;
-import com.example.payment_configuration_service.entity.PaymentMethod;
+import com.example.payment_configuration_service.dto.PaymentMethodResponse;
 import com.example.payment_configuration_service.service.PaymentMethodService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +14,7 @@ public class PaymentMethodController {
     }
 
     @GetMapping("/api/v1.0/configuration/payment-methods")
-    public List<PaymentMethod> getAllPaymentMethods() {
+    public List<PaymentMethodResponse> getAllPaymentMethods() {
         return paymentMethodService.getAllPaymentMethods();
     }
 }

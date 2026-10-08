@@ -1,5 +1,7 @@
 package com.example.payment_configuration_service.service;
 
+import com.example.payment_configuration_service.dto.PaymentMethodResponse;
+import com.example.payment_configuration_service.dto.PaymentPlanResponse;
 import com.example.payment_configuration_service.entity.PaymentMethod;
 import com.example.payment_configuration_service.entity.PaymentPlan;
 import com.example.payment_configuration_service.repository.PaymentMethodRepository;
@@ -19,9 +21,23 @@ public class PaymentMethodService {
     }
 
 
-    public List<PaymentMethod> getAllPaymentMethods() {
-        return paymentMethodRepository.findAll();
+    public List<PaymentMethodResponse> getAllPaymentMethods() {
+
+        final List<PaymentMethod> paymentMethods = paymentMethodRepository.findAll();
+        final List<PaymentMethodResponse> paymentMethodResponses = new java.util.ArrayList<>();
+        paymentMethods.forEach(paymentMethod -> {
+            final List<PaymentPlan> paymentPlans = getPaymentPlans(paymentMethod);
+            final List<PaymentPlanResponse> paymentPlanResponses = new java.util.ArrayList<>();
+            paymentPlans.forEach(paymentPlan -> {
+                paymentPlanResponses.add(new PaymentPlanResponse(paymentPlan));
+
+            });
+            paymentMethodResponses.add(new PaymentMethodResponse(paymentMethod, paymentPlanResponses));
+
+        });
+        return paymentMethodResponses;
     }
+
 
     public List<PaymentPlan> getPaymentPlans(PaymentMethod paymentMethod) {
         return paymentPlanRepository.findByPaymentMethod(paymentMethod);
