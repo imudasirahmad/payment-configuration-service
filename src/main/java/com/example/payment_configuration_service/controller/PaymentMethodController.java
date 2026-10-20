@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+//@AllArgsConstructor
 public class PaymentMethodController {
     private final PaymentMethodService paymentMethodService;
 
@@ -14,7 +15,7 @@ public class PaymentMethodController {
     }
 
     @GetMapping("/api/v1.0/configuration/payment-methods")
-    public PaymentMethodsResponse getAllPaymentMethods(@RequestParam(value = "name", required = false) String name) {
+    private PaymentMethodsResponse getAllPaymentMethods(@RequestParam(value = "name", required = false) String name) {
         if(name == null || name.isEmpty()){
             return new PaymentMethodsResponse(paymentMethodService.getAllPaymentMethods());
         }else{

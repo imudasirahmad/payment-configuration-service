@@ -6,7 +6,9 @@ import com.example.payment_configuration_service.entity.PaymentMethod;
 import com.example.payment_configuration_service.entity.PaymentPlan;
 import com.example.payment_configuration_service.repository.PaymentMethodRepository;
 import com.example.payment_configuration_service.repository.PaymentPlanRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -54,6 +56,11 @@ public class PaymentMethodService {
         return paymentMethodResponses;
     }
 
+    public PaymentPlan filterByPlanId(Long planId){
+        return paymentPlanRepository.findById(planId).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Payment plan not found"
+        ));
+    }
     public List<PaymentPlan> getPaymentPlans(PaymentMethod paymentMethod) {
         return paymentPlanRepository.findByPaymentMethod(paymentMethod);
     }
