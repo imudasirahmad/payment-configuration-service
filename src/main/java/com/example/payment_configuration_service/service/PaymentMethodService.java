@@ -56,10 +56,19 @@ public class PaymentMethodService {
         return paymentMethodResponses;
     }
 
-    public PaymentPlan filterByPlanId(Long planId){
+    public PaymentPlan getPlanById(Long planId){
         return paymentPlanRepository.findById(planId).orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "Payment plan not found"
         ));
+    }
+    public List<PaymentMethodResponse> filterByPlanId(Long planId){
+
+        PaymentPlan paymentPlan = getPlanById(planId);
+        PaymentMethod paymentMethod = paymentPlan.getPaymentMethod();
+        PaymentPlanResponse paymentPlanResponse = new PaymentPlanResponse(paymentPlan);
+        List<PaymentPlanResponse> paymentPlanResponses = List.of(paymentPlanResponse);
+        PaymentMethodResponse paymentMethodResponse = new PaymentMethodResponse(paymentMethod, paymentPlanResponses);
+        return List.of(paymentMethodResponse);
     }
     public List<PaymentPlan> getPaymentPlans(PaymentMethod paymentMethod) {
         return paymentPlanRepository.findByPaymentMethod(paymentMethod);
