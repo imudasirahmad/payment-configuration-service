@@ -61,9 +61,9 @@ public class PaymentMethodService {
                 HttpStatus.NOT_FOUND, "Payment plan not found"
         ));
     }
-    public List<PaymentMethodResponse> filterByPlanId(Long planId){
+    public List<PaymentMethodResponse> filterById(Long id){
 
-        PaymentPlan paymentPlan = getPlanById(planId);
+        PaymentPlan paymentPlan = getPlanById(id);
         PaymentMethod paymentMethod = paymentPlan.getPaymentMethod();
         PaymentPlanResponse paymentPlanResponse = new PaymentPlanResponse(paymentPlan);
         List<PaymentPlanResponse> paymentPlanResponses = List.of(paymentPlanResponse);

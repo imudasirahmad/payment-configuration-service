@@ -6,13 +6,13 @@ public class PaymentMethodResponse {
     private final String name;
     private final String displayName;
     private final String paymentType;
-    private final List<PaymentPlanResponse> plans;
+    private final List<PaymentPlanResponse> paymentPlans;
 
-    public PaymentMethodResponse(PaymentMethod paymentMethod, List<PaymentPlanResponse> plans) {
+    public PaymentMethodResponse(PaymentMethod paymentMethod, List<PaymentPlanResponse> paymentPlans) {
         this.name = paymentMethod.getName();
         this.displayName = paymentMethod.getDisplayName();
         this.paymentType = paymentMethod.getPaymentType();
-        this.plans = plans;
+        this.paymentPlans = paymentPlans;
     }
 
     public String getName() {
@@ -25,7 +25,7 @@ public class PaymentMethodResponse {
     public String getPaymentType() {
         return paymentType;
     }
-    public List<PaymentPlanResponse> getPlans() {
-        return plans;
+    public List<PaymentPlanResponse> getPaymentPlans() {
+        return paymentPlans;
     }
 }
