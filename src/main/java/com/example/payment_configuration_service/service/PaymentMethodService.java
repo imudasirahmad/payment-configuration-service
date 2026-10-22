@@ -1,5 +1,6 @@
 package com.example.payment_configuration_service.service;
 
+import com.example.payment_configuration_service.dto.PaymentMethodRequest;
 import com.example.payment_configuration_service.dto.PaymentMethodResponse;
 import com.example.payment_configuration_service.dto.PaymentPlanResponse;
 import com.example.payment_configuration_service.entity.PaymentMethod;
@@ -73,4 +74,39 @@ public class PaymentMethodService {
     public List<PaymentPlan> getPaymentPlans(PaymentMethod paymentMethod) {
         return paymentPlanRepository.findByPaymentMethod(paymentMethod);
     }
+
+    PaymentMethod addPaymentMethod(PaymentMethod paymentMethod) {
+        return paymentMethodRepository.save(paymentMethod);
+    }
+
+    public PaymentMethod addPaymentMethod(PaymentMethodRequest paymentMethodRequest) {
+        PaymentMethod paymentMethod = new PaymentMethod();
+
+        paymentMethod.setName(paymentMethodRequest.getName());
+        paymentMethod.setDisplayName(paymentMethodRequest.getDisplayName());
+        paymentMethod.setPaymentType(paymentMethodRequest.getPaymentType());
+
+        PaymentMethod savedPaymentMethod = paymentMethodRepository.save(paymentMethod);
+
+        boolean isPaymentPlansAvailable = paymentMethodRequest.getPaymentPlans() != null && !paymentMethodRequest.getPaymentPlans().isEmpty();
+
+        if(isPaymentPlansAvailable){
+            List<PaymentPlan> paymentPlans = paymentMethodRequest.getPaymentPlans().stream()
+                    .map(paymentPlanRequest -> {
+                        PaymentPlan paymentPlan = new PaymentPlan();
+                        paymentPlan.setNetAmount(paymentPlanRequest.getNetAmount());
+                        paymentPlan.setTaxAmount(paymentPlanRequest.getTaxAmount());
+                        paymentPlan.setGrossAmount(paymentPlanRequest.getGrossAmount());
+                        paymentPlan.setCurrency(paymentPlanRequest.getCurrency());
+                        paymentPlan.setDuration(paymentPlanRequest.getDuration());
+                        paymentPlan.setPaymentMethod(savedPaymentMethod);
+                        return paymentPlan;
+                    })
+                    .toList();
+            paymentPlanRepository.saveAll(paymentPlans);
+        }
+
+        return savedPaymentMethod;
+    }
+
 }
